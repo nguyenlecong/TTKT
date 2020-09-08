@@ -9,18 +9,22 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtGui import QImage, QPixmap
 import cv2
-import os
-from PyQt5.QtWidgets import QFileDialog, QVBoxLayout
-from PyQt5.QtGui import QPixmap
+import numpy as np
 
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
+
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(961, 613)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+        self.graphicsView = QtWidgets.QGraphicsView(self.centralwidget)
+        self.graphicsView.setGeometry(QtCore.QRect(60, 50, 860, 400))
+        self.graphicsView.setObjectName("graphicsView")
         self.groupBox = QtWidgets.QGroupBox(self.centralwidget)
         self.groupBox.setGeometry(QtCore.QRect(60, 460, 331, 91))
         self.groupBox.setTitle("")
@@ -33,13 +37,21 @@ class Ui_MainWindow(object):
         self.pushButton_2.setGeometry(QtCore.QRect(190, 30, 111, 31))
         self.pushButton_2.setObjectName("pushButton_2")
         self.pushButton_2.clicked.connect(self.clicked2)
-        self.graphicsView = QtWidgets.QGraphicsView(self.centralwidget)
-        self.graphicsView.setGeometry(QtCore.QRect(60, 50, 811, 391))
-        self.graphicsView.setObjectName("graphicsView")
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(450, 20, 141, 20))
         self.label.setBaseSize(QtCore.QSize(0, 0))
         self.label.setObjectName("label")
+        self.photo = QtWidgets.QLabel(self.centralwidget)
+        self.photo.setGeometry(QtCore.QRect(70, 70, 841, 361))
+        self.photo.setText("")
+        # self.photo.setPixmap(QtGui.QPixmap("imgs/1.jpg"))
+        self.photo.setObjectName("photo")
+
+        self.photo1 = QtWidgets.QLabel(self.centralwidget)
+        self.photo1.setGeometry(QtCore.QRect(70, 70, 841, 361))
+        self.photo1.setText("")
+        # self.photo1.setPixmap(QtGui.QPixmap("imgs/2.jpg"))
+        self.photo1.setObjectName("photo1")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 961, 26))
@@ -52,31 +64,21 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-
     def retranslateUi(self, MainWindow):
+
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.pushButton.setText(_translate("MainWindow", "Choose Imge"))
-        self.pushButton_2.setText(_translate("MainWindow", "Gray Scole"))
-        self.label.setText(_translate("MainWindow", "Gray Scole App"))
+        self.pushButton_2.setText(_translate("MainWindow", "Gray Scale"))
+        self.label.setText(_translate("MainWindow", "Gray Scale App"))
 
     def clicked1(self):
+
         filename = QFileDialog.getOpenFileName()
-        imgpath = filename[0]
-        pixmap = QPixmap(imgpath)
-        self.label.setPixmap(QPixmap(pixmap))
+        self.imgpath = filename[0]
+        pixmap = QPixmap(self.imgpath)
+        self.photo.setPixmap(QPixmap(pixmap))
         # self.resize(pixmap.width(), pixmap.height())
-        
-        self.img = cv2.imread('1.jpg')
-        scale_percent = 30 # percent of original size
-        width = int(self.img.shape[1] * scale_percent / 100)
-        height = int(self.img.shape[0] * scale_percent / 100)
-        dim = (width, height)
-        # resize image
-        self.resized = cv2.resize(self.img, dim, interpolation = cv2.INTER_AREA)
-        cv2.imshow("og img", self.resized)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
 
     def clicked2(self):
 
@@ -86,14 +88,23 @@ class Ui_MainWindow(object):
         msg.setWindowTitle("Processing...")
         msg.exec_()
 
-        cvt = cv2.cvtColor(self.resized, cv2.COLOR_BGR2GRAY)
-        cv2.imshow('gray img', cvt)
+        image = cv2.imread(self.imgpath)
+
+        cvt = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        cvt = cv2.cvtColor(cvt, cv2.COLOR_GRAY2BGR)
+
+        height, width, channel = cvt.shape
+        bytesPerLine = width * channel
+
+        image1 = QImage(cvt.data, width, height, bytesPerLine, QImage.Format_RGB888)
+
+        self.photo1.setPixmap(QPixmap.fromImage(image1))
+
         cv2.waitKey(0)
         cv2.destroyAllWindows()
 
-        
-
 if __name__ == "__main__":
+    
     import sys
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
