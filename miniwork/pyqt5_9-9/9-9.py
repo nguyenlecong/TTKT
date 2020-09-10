@@ -47,7 +47,7 @@ class Ui_MainWindow(QtWidgets.QGraphicsView):
         self.graphicsView.setObjectName("graphicsView")
 
         self.groupBox = QtWidgets.QGroupBox(self.centralwidget)
-        self.groupBox.setGeometry(QtCore.QRect(60, 460, 480, 91))
+        self.groupBox.setGeometry(QtCore.QRect(60, 460, 650, 91))
         self.groupBox.setTitle("")
         self.groupBox.setObjectName("groupBox")
 
@@ -64,7 +64,12 @@ class Ui_MainWindow(QtWidgets.QGraphicsView):
         self.pushButton_3 = QtWidgets.QPushButton(self.groupBox)
         self.pushButton_3.setGeometry(QtCore.QRect(340, 30, 111, 31))
         self.pushButton_3.setObjectName("pushButton_3")
-        self.pushButton_3.clicked.connect(self.zoom) 
+        self.pushButton_3.clicked.connect(self.ogimg) 
+
+        self.pushButton_4 = QtWidgets.QPushButton(self.groupBox)
+        self.pushButton_4.setGeometry(QtCore.QRect(490, 30, 111, 31))
+        self.pushButton_4.setObjectName("pushButton_4")
+        self.pushButton_4.clicked.connect(self.zoom) 
 
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(450, 20, 141, 20))
@@ -97,7 +102,8 @@ class Ui_MainWindow(QtWidgets.QGraphicsView):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.pushButton_1.setText(_translate("MainWindow", "Select Image"))
         self.pushButton_2.setText(_translate("MainWindow", "Gray Scale"))
-        self.pushButton_3.setText(_translate("MainWindow", "Zoom"))
+        self.pushButton_3.setText(_translate("MainWindow", "Original Image"))
+        self.pushButton_4.setText(_translate("MainWindow","Zoom"))
         self.label.setText(_translate("MainWindow", "Beginner App"))
 
     imgpath = None
@@ -118,11 +124,7 @@ class Ui_MainWindow(QtWidgets.QGraphicsView):
         #if not select any image, notice select an image
         if (self.imgpath == None):
 
-            msg = QtWidgets.QMessageBox()
-            msg.setIcon(QtWidgets.QMessageBox.Information)
-            msg.setText("Select Image First!")
-            msg.setWindowTitle("Processing...")
-            msg.exec_()
+            self.notice()
             
         #else, grayscale the image    
         else:
@@ -147,16 +149,22 @@ class Ui_MainWindow(QtWidgets.QGraphicsView):
             cv2.waitKey(0)
             cv2.destroyAllWindows()
 
+    def ogimg(self):
+
+        if (self.imgpath == None):
+
+            self.notice()
+        
+        else:
+
+            self.photo.setPixmap(QPixmap(self.imgpath))
+
     def zoom(self):
 
         #if not select any image, notice select an image
         if (self.imgpath == None):
 
-            msg = QtWidgets.QMessageBox()
-            msg.setIcon(QtWidgets.QMessageBox.Information)
-            msg.setText("Select Image First!")
-            msg.setWindowTitle("Processing...")
-            msg.exec_()
+            self.notice()
 
         #else can zoom an image
         else:
@@ -168,11 +176,18 @@ class Ui_MainWindow(QtWidgets.QGraphicsView):
             msg1.setText("You Can Zoom Later :v ...")
             msg1.setWindowTitle("Processing...")
             msg1.exec_()
+    
+    def notice(self):
 
+        if (self.imgpath == None):
+
+            msg = QtWidgets.QMessageBox()
+            msg.setIcon(QtWidgets.QMessageBox.Information)
+            msg.setText("Select Image First!")
+            msg.setWindowTitle("Processing...")
+            msg.exec_()
 
 # ====================================================================================            
-
-
 
 if __name__ == "__main__":
     
