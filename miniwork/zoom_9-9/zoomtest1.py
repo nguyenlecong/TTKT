@@ -51,11 +51,11 @@ class PhotoViewer(QtWidgets.QGraphicsView):
             if event.angleDelta().y() > 0:
                 factor = 1.1
                 self._zoom += 1
-                # print(self._zoom*factor)
+                print(self._zoom*factor)
             else:
                 factor = 0.9
                 self._zoom -= 1
-                # print(self._zoom*factor)
+                print(self._zoom*factor)
             if self._zoom > 0:
                 self.scale(factor, factor)
             elif self._zoom == 0:
