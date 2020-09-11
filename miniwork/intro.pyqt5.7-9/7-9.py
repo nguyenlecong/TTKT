@@ -46,12 +46,6 @@ class Ui_MainWindow(object):
         self.photo.setText("")
         # self.photo.setPixmap(QtGui.QPixmap("imgs/1.jpg"))
         self.photo.setObjectName("photo")
-
-        self.photo1 = QtWidgets.QLabel(self.centralwidget)
-        self.photo1.setGeometry(QtCore.QRect(70, 70, 841, 361))
-        self.photo1.setText("")
-        # self.photo1.setPixmap(QtGui.QPixmap("imgs/2.jpg"))
-        self.photo1.setObjectName("photo1")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 961, 26))
@@ -82,12 +76,6 @@ class Ui_MainWindow(object):
 
     def clicked2(self):
 
-        msg = QtWidgets.QMessageBox()
-        msg.setIcon(QtWidgets.QMessageBox.Information)
-        msg.setText("Successfull Process!")
-        msg.setWindowTitle("Processing...")
-        msg.exec_()
-
         image = cv2.imread(self.imgpath)
 
         cvt = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -98,7 +86,7 @@ class Ui_MainWindow(object):
 
         image1 = QImage(cvt.data, width, height, bytesPerLine, QImage.Format_RGB888)
 
-        self.photo1.setPixmap(QPixmap.fromImage(image1))
+        self.photo.setPixmap(QPixmap.fromImage(image1))
 
         cv2.waitKey(0)
         cv2.destroyAllWindows()

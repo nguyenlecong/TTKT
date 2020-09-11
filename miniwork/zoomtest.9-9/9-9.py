@@ -9,31 +9,13 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QFileDialog, QWidget
+from PyQt5.QtWidgets import QFileDialog, QWidget, QLabel, QVBoxLayout
 from PyQt5.QtGui import QColor, QImage, QPainter, QPixmap
 from PyQt5.QtCore import *
 import cv2
 import numpy as np
 
-
 class Ui_MainWindow(QtWidgets.QGraphicsView):
-
-    photoClicked = QtCore.pyqtSignal(QtCore.QPoint)
-
-    def __init__(self):
-        super(Ui_MainWindow, self).__init__()
-        self._zoom = 0
-        self._empty = True
-        self._scene = QtWidgets.QGraphicsScene(self)
-        self._photo = QtWidgets.QGraphicsPixmapItem()
-        self._scene.addItem(self._photo)
-        self.setScene(self._scene)
-        self.setTransformationAnchor(QtWidgets.QGraphicsView.AnchorUnderMouse)
-        self.setResizeAnchor(QtWidgets.QGraphicsView.AnchorUnderMouse)
-        self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.setBackgroundBrush(QtGui.QBrush(QtGui.QColor(255,255,255)))
-        self.setFrameShape(QtWidgets.QFrame.NoFrame)
 
     def setupUi(self, MainWindow):
 
@@ -93,9 +75,6 @@ class Ui_MainWindow(QtWidgets.QGraphicsView):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-
-# ====================================================================================
-
     def retranslateUi(self, MainWindow):
 
         _translate = QtCore.QCoreApplication.translate
@@ -106,9 +85,11 @@ class Ui_MainWindow(QtWidgets.QGraphicsView):
         self.pushButton_4.setText(_translate("MainWindow","Zoom"))
         self.label.setText(_translate("MainWindow", "Beginner App"))
 
+# ============================================================================================
+
     imgpath = None
     
-    #select an image from file browser
+    # Select an image from file browser
     def selectimg(self):
 
         filename = QFileDialog.getOpenFileName()
@@ -117,23 +98,21 @@ class Ui_MainWindow(QtWidgets.QGraphicsView):
         self.photo.setPixmap(QPixmap(pixmap))
         # self.resize(pixmap.width(), pixmap.height())
     
-    photoClicked = QtCore.pyqtSignal(QtCore.QPoint)
-
     def grayscale(self):
 
-        #if not select any image, notice select an image
+        # If not select any image, notice select an image
         if (self.imgpath == None):
 
             self.notice()
             
-        #else, grayscale the image    
+        # Else, grayscale the image    
         else:
 
-            msg1 = QtWidgets.QMessageBox()
-            msg1.setIcon(QtWidgets.QMessageBox.Information)
-            msg1.setText("Successfull Process!")
-            msg1.setWindowTitle("Processing...")
-            msg1.exec_()
+            msg = QtWidgets.QMessageBox()
+            msg.setIcon(QtWidgets.QMessageBox.Information)
+            msg.setText("Successfull Gray Scale!")
+            msg.setWindowTitle("Processing...")
+            msg.exec_()
 
             image = cv2.imread(self.imgpath)
             
@@ -142,9 +121,9 @@ class Ui_MainWindow(QtWidgets.QGraphicsView):
             
             height, width, channel = cvt.shape
             bytesPerLine = width * channel
-            image1 = QImage(cvt.data, width, height, bytesPerLine, QImage.Format_RGB888)
+            image = QImage(cvt.data, width, height, bytesPerLine, QImage.Format_RGB888)
             
-            self.photo.setPixmap(QPixmap.fromImage(image1))
+            self.photo.setPixmap(QPixmap.fromImage(image))
             
             cv2.waitKey(0)
             cv2.destroyAllWindows()
@@ -161,22 +140,22 @@ class Ui_MainWindow(QtWidgets.QGraphicsView):
 
     def zoom(self):
 
-        #if not select any image, notice select an image
+        # If not select any image, notice select an image
         if (self.imgpath == None):
 
-            self.notice()
+            self.notice() 
 
-        #else can zoom an image
+        # Else can zoom an image
         else:
 
-            self.photo.setPixmap(QPixmap(self.imgpath))
+            msg = QtWidgets.QMessageBox()
+            msg.setIcon(QtWidgets.QMessageBox.Information)
+            msg.setText("You Will Can Zoom Later :v")
+            msg.setWindowTitle("Processing...")
+            msg.exec_()
 
-            msg1 = QtWidgets.QMessageBox()
-            msg1.setIcon(QtWidgets.QMessageBox.Information)
-            msg1.setText("You Can Zoom Later :v ...")
-            msg1.setWindowTitle("Processing...")
-            msg1.exec_()
-    
+            self.zooming = True
+            
     def notice(self):
 
         if (self.imgpath == None):
@@ -187,7 +166,8 @@ class Ui_MainWindow(QtWidgets.QGraphicsView):
             msg.setWindowTitle("Processing...")
             msg.exec_()
 
-# ====================================================================================            
+# ===========================================================================================
+
 
 if __name__ == "__main__":
     
