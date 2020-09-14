@@ -1,5 +1,5 @@
 
-# ===== GraphicsView Framework =====
+'''===== GraphicsView Framework ====='''
 # * Provides:
 #   - a surface for managing interactive 2D graphical items
 #   - a view widget for visualizing the items
