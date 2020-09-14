@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 # Form implementation generated from reading ui file '7-9.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.0
@@ -14,6 +12,7 @@ from PyQt5.QtGui import QColor, QImage, QPainter, QPixmap
 from PyQt5.QtCore import *
 import cv2
 import numpy as np
+import photo_viewer
 
 class Ui_MainWindow(QtWidgets.QGraphicsView):
 
@@ -150,9 +149,11 @@ class Ui_MainWindow(QtWidgets.QGraphicsView):
 
             msg = QtWidgets.QMessageBox()
             msg.setIcon(QtWidgets.QMessageBox.Information)
-            msg.setText("You Will Can Zoom Later :v")
+            msg.setText("You Can Zooming Now!")
             msg.setWindowTitle("Processing...")
             msg.exec_()
+
+            photo_viewer()
             
     def notice(self):
 
