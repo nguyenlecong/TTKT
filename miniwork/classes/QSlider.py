@@ -33,7 +33,7 @@ class Window(QWidget):
         self.slider.setMaximum((100))
         self.slider.valueChanged.connect(self.changeValue)
 
-        self.label = QLabel("-100")
+        self.label = QLabel("0")
         self.label.setFont(QtGui.QFont("Arial", 14))
 
         hbox.addWidget(self.slider)

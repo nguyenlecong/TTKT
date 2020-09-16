@@ -10,7 +10,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QFileDialog, QWidget, QLabel, QVBoxLayout
-from PyQt5.QtGui import QColor, QImage, QPainter, QPixmap
+from PyQt5.QtGui import QColor, QIcon, QImage, QPainter, QPixmap
 from PyQt5.QtCore import *
 import cv2
 import numpy as np
@@ -23,6 +23,7 @@ class Ui_MainWindow(QtWidgets.QGraphicsView):
         MainWindow.resize(961, 613)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+        self.setWindowIcon(QIcon('imgs/2.jpg'))
 
         self.graphicsView = QtWidgets.QGraphicsView(self.centralwidget)
         self.graphicsView.setGeometry(QtCore.QRect(60, 50, 860, 400))
@@ -75,21 +76,11 @@ class Ui_MainWindow(QtWidgets.QGraphicsView):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-        self._scene = QtWidgets.QGraphicsScene(self)
-        self._photo = QtWidgets.QGraphicsPixmapItem()
-        self._scene.addItem(self._photo)
-        self.setScene(self._scene)
-        self.setTransformationAnchor(QtWidgets.QGraphicsView.AnchorUnderMouse)
-        self.setResizeAnchor(QtWidgets.QGraphicsView.AnchorUnderMouse)
-        self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.setFrameShape(QtWidgets.QFrame.NoFrame)
-
-
     def retranslateUi(self, MainWindow):
 
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        
         self.pushButton_1.setText(_translate("MainWindow", "Select Image"))
         self.pushButton_2.setText(_translate("MainWindow", "Gray Scale"))
         self.pushButton_3.setText(_translate("MainWindow", "Original Image"))
@@ -97,7 +88,7 @@ class Ui_MainWindow(QtWidgets.QGraphicsView):
         self.label.setText(_translate("MainWindow", "Beginner App"))
 
 # ============================================================================================
-    
+
     imgpath = None
     
     # Select an image from file browser
@@ -105,7 +96,6 @@ class Ui_MainWindow(QtWidgets.QGraphicsView):
 
         filename = QFileDialog.getOpenFileName()
         self.imgpath = filename[0]
-        print(self.imgpath)
         pixmap = QPixmap(self.imgpath)
         self.photo.setPixmap(QPixmap(pixmap))
         # self.resize(pixmap.width(), pixmap.height())
@@ -162,19 +152,9 @@ class Ui_MainWindow(QtWidgets.QGraphicsView):
 
             msg = QtWidgets.QMessageBox()
             msg.setIcon(QtWidgets.QMessageBox.Information)
-            msg.setText("You Can Zooming Now!")
+            msg.setText("You Will Can Zoom Later :v")
             msg.setWindowTitle("Processing...")
             msg.exec_()
-
-            viewer = PhotoViewer(self)
-            VBlayout = QtWidgets.QVBoxLayout(self)
-            VBlayout.addWidget(viewer)
-            HBlayout = QtWidgets.QHBoxLayout()
-            HBlayout.setAlignment(QtCore.Qt.AlignLeft)
-            VBlayout.addLayout(HBlayout)
-            self.setGeometry(500, 300, 961, 613)
-            self.setWindowTitle("Zoom")
-            self.show()
             
     def notice(self):
 
@@ -188,110 +168,6 @@ class Ui_MainWindow(QtWidgets.QGraphicsView):
 
 # ===========================================================================================
 
-class PhotoViewer(QtWidgets.QGraphicsView):
-    
-    photoClicked = QtCore.pyqtSignal(QtCore.QPoint)
-
-    def __init__(self, parent):
-
-        super(PhotoViewer, self).__init__()
-        self._zoom = 0
-        self._empty = True
-        self._scene = QtWidgets.QGraphicsScene(self)
-        self._photo = QtWidgets.QGraphicsPixmapItem()
-        self._scene.addItem(self._photo)
-        self.setScene(self._scene)
-        self.setTransformationAnchor(QtWidgets.QGraphicsView.AnchorUnderMouse)
-        self.setResizeAnchor(QtWidgets.QGraphicsView.AnchorUnderMouse)
-        self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.setFrameShape(QtWidgets.QFrame.NoFrame)
-
-        # path = Ui_MainWindow()
-        # path.selectimg()
-        # print(path.imgpath)
-        # self.setPhoto(QtGui.QPixmap(path.imgpath))
-
-        self.setPhoto(QtGui.QPixmap('imgs/2.jpg'))
-
-    def fitInView(self, scale=True):
-
-        rect = QtCore.QRectF(self._photo.pixmap().rect())
-
-        if not rect.isNull():
-
-            self.setSceneRect(rect)
-            unity = self.transform().mapRect(QtCore.QRectF(0, 0, 1, 1))
-            self.scale(1 / unity.width(), 1 / unity.height())
-            viewrect = self.viewport().rect()
-            scenerect = self.transform().mapRect(rect)
-            factor = min(viewrect.width() / scenerect.width(), viewrect.height() / scenerect.height())
-            self.scale(factor, factor)
-            self._zoom = 0
-
-    def setPhoto(self, pixmap=None):
-
-        self._zoom = 0
-
-        if pixmap and not pixmap.isNull():
-
-            self._empty = False
-            self.setDragMode(QtWidgets.QGraphicsView.ScrollHandDrag)
-            self._photo.setPixmap(pixmap)
-
-        else:
-
-            self._empty = True
-            self.setDragMode(QtWidgets.QGraphicsView.NoDrag)
-            self._photo.setPixmap(QtGui.QPixmap())
-
-        self.fitInView()
-
-    def wheelEvent(self, event):
-
-            if event.angleDelta().y() > 0:
-
-                factor = 1.1
-                self._zoom += 1
-                # print(self._zoom*factor)
-
-            else:
-
-                factor = 0.9
-                self._zoom -= 1
-                # print(self._zoom*factor)
-
-            if self._zoom > 0:
-
-                self.scale(factor, factor)
-
-            elif self._zoom == 0:
-
-                self.fitInView()
-
-            else:
-
-                self._zoom = 0
-
-    def toggleDragMode(self):
-
-        if self.dragMode() == QtWidgets.QGraphicsView.ScrollHandDrag:
-
-            self.setDragMode(QtWidgets.QGraphicsView.NoDrag)
-
-        elif not self._photo.pixmap().isNull():
-
-            self.setDragMode(QtWidgets.QGraphicsView.ScrollHandDrag)
-
-    def mousePressEvent(self, event):
-
-        if self._photo.isUnderMouse():
-
-            self.photoClicked.emit(self.mapToScene(event.pos()).toPoint())
-
-        super(PhotoViewer, self).mousePressEvent(event)
-
-# ===========================================================================================
 
 if __name__ == "__main__":
     
