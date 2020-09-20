@@ -18,7 +18,7 @@ class PhotoViewer(QtWidgets.QGraphicsView):
         self.setResizeAnchor(QtWidgets.QGraphicsView.AnchorUnderMouse)
         self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        # self.setBackgroundBrush(QtGui.QBrush(QtGui.QColor(255,255,255)))
+        self.setBackgroundBrush(QtGui.QBrush(QtGui.QColor(255,255,255)))
         self.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.setPhoto(QtGui.QPixmap('imgs/1.jpg'))
 
@@ -90,6 +90,6 @@ if __name__ == '__main__':
     import sys
     app = QtWidgets.QApplication(sys.argv)
     window = Window()
-    # window.setGeometry(500, 300, 800, 600)
+    window.setGeometry(500, 300, 800, 600)
     window.show()
     sys.exit(app.exec_())

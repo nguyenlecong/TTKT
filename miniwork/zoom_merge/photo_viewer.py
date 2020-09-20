@@ -18,14 +18,15 @@ class PhotoViewer(QtWidgets.QGraphicsView):
         self.setResizeAnchor(QtWidgets.QGraphicsView.AnchorUnderMouse)
         self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.setBackgroundBrush(QtGui.QBrush(QtGui.QColor(255,255,255)))
+        self.setBackgroundBrush(QtGui.QBrush(QtGui.QColor(255, 255, 255)))
         self.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.setGeometry(0, 0, 959, 518)
     
     def hasPhoto(self):
         return not self._empty
 
     def fitInView(self, scale=True):
-        rect = QtCore.QRectF(self._photo.pixmap().rect())
+        # fit the image to current view
         rect = QtCore.QRectF(self._photo.pixmap().rect())
         if not rect.isNull():
             self.setSceneRect(rect)
@@ -38,8 +39,9 @@ class PhotoViewer(QtWidgets.QGraphicsView):
                              viewrect.height() / scenerect.height())
                 self.scale(factor, factor)
             self._zoom = 0
-
+            
     def setPhoto(self, pixmap=None):
+        # set the photo for the view, if photo is empty, create a blank photo
         self._zoom = 0
         if pixmap and not pixmap.isNull():
             self._empty = False
@@ -53,13 +55,16 @@ class PhotoViewer(QtWidgets.QGraphicsView):
         self.fitInView()
 
     def wheelEvent(self, event):
-         if self.hasPhoto():
+        # zoom in or out
+        if self.hasPhoto():
             if event.angleDelta().y() > 0:
                 factor = 1.1
                 self._zoom += 1
             else:
-                factor = 0.9
+                factor = 0.8
                 self._zoom -= 1
+
+            # scaling
             if self._zoom > 0:
                 self.scale(factor, factor)
             elif self._zoom == 0:
@@ -77,24 +82,3 @@ class PhotoViewer(QtWidgets.QGraphicsView):
         if self._photo.isUnderMouse():
             self.photoClicked.emit(self.mapToScene(event.pos()).toPoint())
         super(PhotoViewer, self).mousePressEvent(event)
-
-class Window(QtWidgets.QWidget):
-    def __init__(self):
-        super(Window, self).__init__()
-        self.viewer = PhotoViewer(self)
-        # Arrange layout
-        VBlayout = QtWidgets.QVBoxLayout(self)
-        VBlayout.addWidget(self.viewer)
-        HBlayout = QtWidgets.QHBoxLayout()
-        HBlayout.setAlignment(QtCore.Qt.AlignLeft)
-        VBlayout.addLayout(HBlayout)
-
-        self.setGeometry(500, 300, 800, 600)
-        self.viewer.setPhoto(QtGui.QPixmap('imgs/1.jpg'))
-
-if __name__ == '__main__':
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    window = Window()
-    window.show()
-    sys.exit(app.exec_())
