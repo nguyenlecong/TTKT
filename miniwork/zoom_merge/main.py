@@ -56,7 +56,7 @@ class Ui_MainWindow(QtWidgets.QGraphicsView):
 
         self.photo_viewer_.setPhoto(pixmap)
 
-    def gray_scale(self, photo_viewer_, input_path = None):
+    def gray_scale(self):
         image = cv2.imread(self.input_path)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
