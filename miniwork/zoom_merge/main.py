@@ -9,17 +9,17 @@ class Ui_MainWindow(QtWidgets.QGraphicsView):
     def setupUi(self, MainWindow):
 
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(961, 613)
+        MainWindow.resize(1200, 900)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
         self.pushButton_1 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_1.setGeometry(QtCore.QRect(60, 550, 121, 31))
+        self.pushButton_1.setGeometry(QtCore.QRect(60, 830, 121, 31))
         self.pushButton_1.setObjectName("pushButton_1")
         self.pushButton_1.clicked.connect(self.open_image_file)
 
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_2.setGeometry(QtCore.QRect(210, 550, 111, 31))
+        self.pushButton_2.setGeometry(QtCore.QRect(210, 830, 111, 31))
         self.pushButton_2.setObjectName("pushButton_2")
         self.pushButton_2.clicked.connect(self.gray_scale)
 
@@ -39,7 +39,7 @@ class Ui_MainWindow(QtWidgets.QGraphicsView):
         scence = QtWidgets.QGraphicsScene()
         scence.addWidget(self.photo_viewer_)
         layout = QtWidgets.QGraphicsView(scence, self.centralwidget)
-        layout.setGeometry(QtCore.QRect(0, 0, 961, 520))
+        layout.setGeometry(QtCore.QRect(0, 0, 1200, 800))
         
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate

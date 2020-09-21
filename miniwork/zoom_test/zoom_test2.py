@@ -39,16 +39,13 @@ class myWindow(QWidget):                                                       #
         angleX=angle.x()                                                       # Distance rolled horizontally (not used here)
         angleY=angle.y()                                                       # Vertical rolling distance
         if angleY > 0:                                                         # Roller rolling
-
             self.scaledImg = self.imgPixmap.scaled(self.scaledImg.width()+50,
                                                    self.scaledImg.height()+50)
             newWidth = event.x() - (self.scaledImg.width() * (event.x()-self.singleOffset.x())) / (self.scaledImg.width()-50)
             newHeight = event.y() - (self.scaledImg.height() * (event.y()-self.singleOffset.y())) / (self.scaledImg.height()-50)
             self.singleOffset = QPoint(newWidth, newHeight)                    # Update offset
             self.repaint()                                                     # Repaint
-
         else:                                                                 
-            
             self.scaledImg = self.imgPixmap.scaled(self.scaledImg.width()-50,
                                                    self.scaledImg.height()-50)
             newWidth = event.x() - (self.scaledImg.width() * (event.x()-self.singleOffset.x())) / (self.scaledImg.width()+50)

@@ -20,7 +20,7 @@ class PhotoViewer(QtWidgets.QGraphicsView):
         self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setBackgroundBrush(QtGui.QBrush(QtGui.QColor(255, 255, 255)))
         self.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.setGeometry(0, 0, 959, 518)
+        self.setGeometry(0, 0, 1198, 798)
     
     def hasPhoto(self):
         return not self._empty

@@ -3,7 +3,6 @@ from PyQt5.QtWidgets import QFileDialog, QLabel, QVBoxLayout
 from PyQt5.QtGui import QPixmap
 
 class PhotoViewer(QtWidgets.QGraphicsView):
-    
     photoClicked = QtCore.pyqtSignal(QtCore.QPoint)
 
     def __init__(self, parent):
@@ -21,7 +20,7 @@ class PhotoViewer(QtWidgets.QGraphicsView):
         self.setBackgroundBrush(QtGui.QBrush(QtGui.QColor(255,255,255)))
         self.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.setPhoto(QtGui.QPixmap('imgs/1.jpg'))
-
+        
     def fitInView(self, scale=True):
         rect = QtCore.QRectF(self._photo.pixmap().rect())
         if not rect.isNull():
