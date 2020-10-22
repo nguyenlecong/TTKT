@@ -1,5 +1,5 @@
 # TTKT
 HUST - 20201
-Nghiên cứu các công nghệ xử lý ảnh dựa trên Open CV.
-Lập trình giao diện với PyQt5.
-Optical Character Recognition.
+1. Nghiên cứu các công nghệ xử lý ảnh dựa trên Open CV.
+2. Lập trình giao diện với PyQt5.
+3. Optical Character Recognition.
